@@ -11,3 +11,4 @@
 
 from .item import Item
 from .package import Package
+from .client import Client

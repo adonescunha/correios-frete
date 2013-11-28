@@ -11,7 +11,7 @@
 
 from pyvows import Vows, expect
 
-from correios_frete import Package
+from correios_frete import Package, Item
 from correios_frete.constants import CAIXA_PACOTE, ROLO_PRISMA
 
 
@@ -24,8 +24,19 @@ class PackageVows(Vows.Context):
                return Package()
 
           def its_items_list_is_initialized_empty(self, topic):
-               print topic.items
                expect(len(topic.items)).to_equal(0)
+
+          class ItsReducedItem(Vows.Context):
+
+               def topic(self, topic):
+                    attributes = ('weight', 'height', 'width', 'length')
+
+                    for attribute in attributes:
+                         yield (topic.reduced_item, attribute)
+
+               def is_initialized_with_default_attribute_values(self, topic):
+                    item, attribute = topic
+                    expect(getattr(item, attribute)).to_equal(0.0)
 
           class WithoutParameters(Vows.Context):
 
@@ -67,4 +78,36 @@ class PackageVows(Vows.Context):
                def with_provided_attributes(self, topic):
                     attribute, value, item, _ = topic
                     expect(getattr(item, attribute)).to_equal(value)
+
+          class ItsReducedItem(Vows.Context):
+
+               def topic(self, topic):
+                    args, _, package = topic
+
+                    for attribute, value in args:
+                         yield (attribute, value, package.reduced_item)
+
+               def is_updated(self, topic):
+                    attribute, value, item = topic
+                    expect(getattr(item, attribute)).to_equal(value)
+
+     class Delegates(Vows.Context):
+
+          def topic(self):
+               package = Package()
+               args = (
+                    ('weight', 1),
+                    ('height', 2),
+                    ('width', 3),
+                    ('length', 4)
+               )
+               package.reduced_item = Item(**dict(args))
+
+               for attribute, value in args:
+                    yield (package, attribute, value)
+
+          def reduced_item_properties(self, topic):
+               package, attribute, value = topic
+               expect(getattr(package, attribute)).to_equal(value)
+
 
