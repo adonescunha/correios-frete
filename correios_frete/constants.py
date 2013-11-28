@@ -9,5 +9,6 @@
 # Copyright (c) 2013 Adones Cunha adonescunha@gmail.com
 
 
-from .item import Item
-from .package import Package
+CAIXA_PACOTE = 1
+ROLO_PRISMA  = 2
+ENVELOPE     = 3
