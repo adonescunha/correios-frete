@@ -10,7 +10,7 @@
 
 
 from pyvows import Vows, expect
-from mock import Mock
+from .utils import create_sudsobject_mock
 
 from correios_frete import Service
 
@@ -33,31 +33,30 @@ class ServiceVows(Vows.Context):
 
     class WhenInitialized(Vows.Context):
 
-        def topic(self):
-            service = Service(**dict(TEST_CASES))
+        class WhenValidArgumentsArePassed(Vows.Context):
 
-            for attribute, value in TEST_CASES:
-                yield (service, attribute, value)
+            def topic(self):
+                service = Service(**dict(TEST_CASES))
 
-        def it_assign_attributes_values(self, topic):
-            service, attribute, value = topic
-            expect(getattr(service, attribute)).to_equal(value)
+                for attribute, value in TEST_CASES:
+                    yield (service, attribute, value)
+
+            def it_assign_attributes_values(self, topic):
+                service, attribute, value = topic
+                expect(getattr(service, attribute)).to_equal(value)
+
+        class WhenInvalidArgumentsArePassed(Vows.Context):
+
+            def topic(self):
+                return Service(invalid_kwargs=None)
+
+            def it_raises_type_error(self, topic):
+                expect(topic).to_be_an_error_like(TypeError)
 
     class CreateFromSudsObject(Vows.Context):
 
         def topic(self):
-            suds_object = Mock(
-                Codigo=40010,
-                Valor='71,00',
-                PrazoEntrega='1',
-                ValorMaoPropria='0,00',
-                ValorAvisoRecebimento='0,00',
-                ValorValorDeclarado='0,00',
-                EntregaDomiciliar='S',
-                EntregaSabado='S',
-                Erro='0',
-                MsgErro=None
-            )
+            suds_object = create_sudsobject_mock()
             service = Service.create_from_suds_object(suds_object)
 
             for attribute, value in TEST_CASES:

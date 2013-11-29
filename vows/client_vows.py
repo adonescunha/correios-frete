@@ -11,6 +11,7 @@
 
 from pyvows import Vows, expect
 from mock import Mock
+from .utils import create_sudsobject_mock
 
 import correios_frete
 from correios_frete import Client, Package
@@ -31,13 +32,7 @@ class ClientVows(Vows.Context):
 
         class WithCEPOrigem(Vows.Context):
 
-            def teardown(self):
-                import suds
-                correios_frete.client.SudsClient = suds.client.Client
-
             def topic(self):
-                correios_frete.client.SudsClient = Mock()
-
                 cep_origem = '00000-000'
                 kwargs = [
                     ('codigo_empresa', ''),
@@ -54,9 +49,6 @@ class ClientVows(Vows.Context):
                 cep_origem, _, client = topic
                 expect(client.cep_origem).to_equal(cep_origem)
 
-            def it_assigns_a_suds_client(self, topic):
-                correios_frete.client.SudsClient.assert_called_with(WSDL_URL)
-
             class ItAssigns(Vows.Context):
 
                 def topic(self, topic):
@@ -68,6 +60,39 @@ class ClientVows(Vows.Context):
                 def default_attribute_values(self, topic):
                     attribute, value, client = topic
                     expect(getattr(client, attribute)).to_equal(value)
+
+    class WSClient(Vows.Context):
+
+        def teardown(self):
+            import suds
+            correios_frete.client.SudsClient = suds.client.Client
+
+        class WhenWSClientWasNotPreviouslyCalled(Vows.Context):
+            def setup(self):
+                correios_frete.client.SudsClient = Mock()
+
+            def topic(self):
+                cep_origem = '00000-000'
+                client = Client(cep_origem=cep_origem)
+
+                return client.ws_client
+
+            def it_instatiate_suds_client(self, topic):
+                correios_frete.client.SudsClient.assert_called_with(WSDL_URL)
+
+            class WhenWSClientWasPreviousCalled(Vows.Context):
+                def setup(self):
+                    correios_frete.client.SudsClient = Mock()
+
+                def topic(self):
+                    cep_origem = '00000-000'
+                    client = Client(cep_origem=cep_origem)
+                    client._ws_client = Mock()
+
+                    return client.ws_client
+
+                def it_does_not_instatiate_a_new_suds_client(self, topic):
+                    expect(correios_frete.client.SudsClient.called).to_be_false()
 
     class BuildWebServiceCallArgs(Vows.Context):
 
@@ -117,6 +142,9 @@ class ClientVows(Vows.Context):
             services = (SEDEX, PAC)
             client.build_web_service_call_args = Mock(return_value=args)
             client.ws_client.service = Mock()
+            response = Mock(Servicos=[[create_sudsobject_mock()]])
+            getattr(client.ws_client.service, method_name).return_value =\
+                    response
             client.call_web_service(method_name, package, cep_destino,
                     *services)
 

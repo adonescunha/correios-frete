@@ -33,7 +33,13 @@ class Client(object):
         self.valor_declarado = valor_declarado
         self.mao_propria = mao_propria
         self.aviso_recebimento = aviso_recebimento
-        self.ws_client = SudsClient(WSDL_URL)
+
+    @property
+    def ws_client(self):
+        if not hasattr(self, '_ws_client'):
+            self._ws_client = SudsClient(WSDL_URL)
+
+        return self._ws_client
 
     def build_web_service_call_args(self, package, cep_destino, *services):
         return (
