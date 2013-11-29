@@ -1,0 +1,32 @@
+language: python
+python:
+  - "2.7"
+
+install:
+    # update aptitude
+    - sudo apt-get update -y
+    - sudo apt-get install aptitude -y
+
+    # install aptitude packages
+    - LDFLAGS=-lm sudo aptitude install -y $(< requirements)
+
+    # install python requirements
+    - make setup
+
+    # weird travis-ci python paths
+    - export PYTHONPATH=$PYTHONPATH:/usr/lib/pymodules/python2.7/
+    - export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/dist-packages
+    - export PYTHONPATH=$PYTHONPATH:/usr/lib/pyshared/python2.7/
+    - export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages/
+
+    # verify requirements were met
+    - INSTALLDIR=$(python -c "import os; import suds; print(os.path.dirname(suds.__file__))")
+
+script:
+    - export PYTHONPATH=$PYTHONPATH:/usr/lib/pymodules/python2.7/
+    - export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/dist-packages
+    - export PYTHONPATH=$PYTHONPATH:/usr/lib/pyshared/python2.7/
+    - export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages/
+
+    # finally run tests
+    - make ci_test
