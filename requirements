@@ -1,0 +1,8 @@
+libevent-dev
+libxml2-dev
+libcurl4-gnutls-dev
+python-pycurl-dbg
+build-essential
+libpython2.7
+python-dev
+python2.7-dev
