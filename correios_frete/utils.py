@@ -9,7 +9,8 @@
 # Copyright (c) 2013 Adones Cunha adonescunha@gmail.com
 
 
-from .item import Item
-from .package import Package
-from .client import Client
-from .service import Service
+def comma_separated_to_float(value):
+    return float(value.replace(',', '.'))
+
+def s_n_to_bool(value):
+    return {'S': True, 'N': False, None: None}[value]

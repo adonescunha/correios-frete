@@ -12,11 +12,12 @@
 from suds.client import Client as SudsClient
 
 from .constants import WSDL_URL
+from .service import Service
 
 
 def web_service_call(method_name):
     def wrapper(self, package, cep_destino, *services):
-        return self.web_service_call(method_name, package, cep_destino,
+        return self.call_web_service(method_name, package, cep_destino,
                 *services)
 
     return wrapper
@@ -54,4 +55,19 @@ class Client(object):
 
     def call_web_service(self, method_name, package, cep_destino, *services):
         args = self.build_web_service_call_args(package, cep_destino, *services)
-        return getattr(self.ws_client.service, method_name)(*args)
+        result = getattr(self.ws_client.service, method_name)(*args)
+
+        return [Service.create_from_suds_object(result.Servicos[0][i])
+                for i in range(len(result.Servicos[0]))]
+
+    calc_preco_data       = web_service_call('CalcPrecoData')
+
+    calc_preco_prazo      = web_service_call('CalcPrecoPrazo')
+
+    calc_prazo            = web_service_call('CalcPrazo')
+
+    calc_preco            = web_service_call('CalcPreco')
+
+    calc_prezo_prazo_data = web_service_call('CalcPrezoPrazoData')
+
+    calc_prazo_data       = web_service_call('CalcPrecoData')
