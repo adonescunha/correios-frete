@@ -1,3 +1,4 @@
 pyvows
+coverage
 mock
 suds
