@@ -12,6 +12,7 @@ install:
 
     # install python requirements
     - make setup
+    - pip install coveralls
 
     # weird travis-ci python paths
     - export PYTHONPATH=$PYTHONPATH:/usr/lib/pymodules/python2.7/
@@ -30,3 +31,6 @@ script:
 
     # finally run tests
     - make ci_test
+
+after_success:
+    - coveralls
