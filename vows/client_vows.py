@@ -14,7 +14,8 @@ from mock import Mock
 from .utils import create_sudsobject_mock
 
 import correios_frete
-from correios_frete import Client, Package
+from correios_frete import Package
+from correios_frete.client import Client
 from correios_frete.constants import WSDL_URL, CAIXA_PACOTE, SEDEX, PAC
 
 @Vows.batch

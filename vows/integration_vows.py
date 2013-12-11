@@ -11,7 +11,8 @@
 
 from pyvows import Vows, expect
 
-from correios_frete import Client, Package, Service
+from correios_frete import Package, Service
+from correios_frete.client import Client
 from correios_frete.constants import SEDEX, PAC
 
 
