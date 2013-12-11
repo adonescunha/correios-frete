@@ -5,7 +5,7 @@ setup:
 	pip install -r test_requirements.txt
 
 test: compile_ext
-	env PYTHONPATH=$$PYTHONPATH:correios_frete/ pyvows --cover --cover-package=correios_frete -vvv
+	env PYTHONPATH=. coverage run --source=correios_frete ./vows/__main__.py
 
 ci_test:
 	$(MAKE) test

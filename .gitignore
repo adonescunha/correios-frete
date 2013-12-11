@@ -1,3 +1,4 @@
 *.pyc
 dist
 correios_frete.egg-info/
+.coverage
