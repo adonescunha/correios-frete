@@ -1,4 +1,7 @@
-# correios-frete [<img src="https://secure.travis-ci.org/adonescunha/correios-frete.png?branch=master">](http://travis-ci.org/adonescunha/correios-frete)
+# correios-frete
+[<img src="https://secure.travis-ci.org/adonescunha/correios-frete.png?branch=master">](http://travis-ci.org/adonescunha/correios-frete)
+[![PyPI Version](https://pypip.in/v/correios-frete/badge.png)](https://crate.io/packages/correios-frete)
+[![Coverage Status](https://coveralls.io/repos/adonescunha/correios-frete/badge.png)](https://coveralls.io/r/adonescunha/correios-frete)
 
 Cliente Python para o [WebService dos Correios](http://www.correios.com.br/webservices/), para calcular os preços e prazos de entregas de encomendas.
 
