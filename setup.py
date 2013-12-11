@@ -25,14 +25,12 @@ setup(
         'correios_frete'
     ],
     classifiers=[
-        'Development Status :: 1 - Planning',
-        'Environment :: Web Environment',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Framework :: Django'
     ],
     install_requires=[
         'suds'
